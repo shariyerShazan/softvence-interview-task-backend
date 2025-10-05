@@ -13,15 +13,14 @@ export const addProduct = async (req, res) => {
             message: "Something is missing",
           });
      }
-    const vendorId = req.userId;
-    const vendro = await User.findById(vendorId)
-    if(vendro){
-       return  res.status(404).json({
-            success: false,
-            message: "Only vendor can add product",
-            product,
-          });
-    }
+    // const vendorId = req.userId;
+    // const vendro = await User.findById(vendorId)
+    // if(vendro){
+    //    return  res.status(404).json({
+    //         success: false,
+    //         message: "Only vendor can add product",
+    //       });
+    // }
 
     const product = new Product({
       title,
@@ -29,7 +28,7 @@ export const addProduct = async (req, res) => {
       price,
       stock,
       category,
-      vendor: vendorId,
+      vendor: req.userId,
       images,
     });
 

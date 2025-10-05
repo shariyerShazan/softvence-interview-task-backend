@@ -182,7 +182,7 @@ export const firebaseLogin = async (req, res) => {
 };
 
 
-export const logout = async (req, res) => {
+export const logout = async (_, res) => {
     try {
       res.clearCookie("token", {
         httpOnly: true,
@@ -237,7 +237,7 @@ export const removeVendor = async (req, res) => {
 
     if (!vendor) {
       return res.status(404).json({
-        message: "Member not found",
+        message: "Vendor not found",
         success: false,
       });
     }
@@ -246,7 +246,7 @@ export const removeVendor = async (req, res) => {
     await vendor.save();
 
     return res.status(200).json({
-      message: "Member removed",
+      message: "Vendor removed",
       success: true,
     });
   } catch (error) {
