@@ -6,6 +6,7 @@ import cors from "cors"
 import { connectDB } from "./utils/connectDB.js"
 import userRoutes from "./routes/user.routes.js"
 import productRoutes from "./routes/product.routes.js"
+import orderRoutes from "./routes/order.route.js"
 
 const app = express()
 app.use(express.json())
@@ -31,6 +32,7 @@ app.get("/" , (_ , res)=>{
 
 app.use("/api/users" , userRoutes)
 app.use("/api/products" , productRoutes)
+app.use("/api/orders" , orderRoutes)
  
 
 const PORT = process.env.PORT || 7007
