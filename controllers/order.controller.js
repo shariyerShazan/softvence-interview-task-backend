@@ -1,5 +1,5 @@
-import { Order } from "../models/order.model";
-import { Product } from "../models/product.model";
+import { Order } from "../models/order.model.js";
+import { Product } from "../models/product.model.js";
 
 
 
