@@ -1,5 +1,6 @@
 import { Order } from "../models/order.model.js";
 import { Product } from "../models/product.model.js";
+import { User } from "../models/user.model.js";
 
 
 
@@ -67,15 +68,15 @@ export const createOrder = async (req, res) => {
 
 export const getOrders = async (req, res) => {
     try {
-      const user = req.userId; 
   
       let orders;
-      if (user.role === "customer") {
-        orders = await Order.find({ customer: user.id })
+      const user = await User.findById(req.userId)
+      if (user.role === "user") {
+        orders = await Order.find({ customer: req.userId })
           .populate("products.product", "title price")
           .populate("vendors", "fullName email");
       } else if (user.role === "vendor") {
-        orders = await Order.find({ vendors: user.id })
+        orders = await Order.find({ vendors: req.userId })
           .populate("products.product", "title price")
           .populate("customer", "fullName email");
       } else if (user.role === "admin") {
@@ -89,6 +90,7 @@ export const getOrders = async (req, res) => {
       res.status(200).json({
         success: true,
         count: orders.length,
+        message: orders.length === 0 && "No order yet!" ,
         orders,
       });
     } catch (error) {
