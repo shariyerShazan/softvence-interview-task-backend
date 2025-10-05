@@ -6,5 +6,25 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.0"
-  }
+  },
+  "type": "module",
+  "name": "jobtast",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shariyerShazan/softvence-task-fullStack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shariyerShazan/softvence-task-fullStack/issues"
+  },
+  "homepage": "https://github.com/shariyerShazan/softvence-task-fullStack#readme",
+  "description": ""
 }
