@@ -64,3 +64,36 @@ export const createOrder = async (req, res) => {
 };
 
 
+
+export const getOrders = async (req, res) => {
+    try {
+      const user = req.userId; 
+  
+      let orders;
+      if (user.role === "customer") {
+        orders = await Order.find({ customer: user.id })
+          .populate("products.product", "title price")
+          .populate("vendors", "fullName email");
+      } else if (user.role === "vendor") {
+        orders = await Order.find({ vendors: user.id })
+          .populate("products.product", "title price")
+          .populate("customer", "fullName email");
+      } else if (user.role === "admin") {
+        orders = await Order.find()
+          .populate("products.product", "title price")
+          .populate("customer vendors", "fullName email");
+      } else {
+        return res.status(403).json({ success: false, message: "Not authorized" });
+      }
+  
+      res.status(200).json({
+        success: true,
+        count: orders.length,
+        orders,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: error.message });
+    }
+  };
+  
