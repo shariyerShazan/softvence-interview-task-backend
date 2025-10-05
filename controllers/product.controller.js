@@ -47,7 +47,7 @@ export const addProduct = async (req, res) => {
 };
 
 
-export const getProducts = async (req, res) => {
+export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find().populate("vendor", "fullName email");
 

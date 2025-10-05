@@ -4,7 +4,8 @@ dotenv.config()
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import { connectDB } from "./utils/connectDB.js"
-
+import userRoutes from "./routes/user.routes.js"
+import productRoutes from "./routes/product.routes.js"
 
 const app = express()
 app.use(express.json())
@@ -27,8 +28,12 @@ app.get("/" , (_ , res)=>{
       }
 })
 
+
+app.use("/api/users" , userRoutes)
+app.use("/api/products" , productRoutes)
  
-const PORT = process.env.PORT
+
+const PORT = process.env.PORT || 7007
 const runserver = async()=>{
     try {
         await connectDB()

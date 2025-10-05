@@ -12,3 +12,6 @@ route.post("/logout" , isAuthed , logout )
 
 route.get("/vendors" , isAuthed , isAdmin , getAllVendor)
 route.delete("/remove-vendor/:vendorId" , isAuthed , isAdmin , removeVendor)
+
+
+export default route

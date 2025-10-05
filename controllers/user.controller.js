@@ -33,18 +33,18 @@ export const register = async (req, res) => {
           message: "Password must be at least 6 characters long.",
         });
       }
-      if (!/[a-z]/.test(password)) {
+      if (!/[a-zA-Z]/.test(password)) {
         return res.status(400).json({
           success: false,
-          message: "Password must contain at least one lower letter",
+          message: "Password must contain at least one letter",
         });
       }
-      if (!/[A-Z]/.test(password)) {
-        return res.status(400).json({
-          success: false,
-          message: "Password must contain at least one upper letter",
-        });
-      }
+    //   if (!/[]/.test(password)) {
+    //     return res.status(400).json({
+    //       success: false,
+    //       message: "Password must contain at least one upper letter",
+    //     });
+    //   }
 
       if (!/\d/.test(password)) {
         return res.status(400).json({
@@ -84,8 +84,8 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if(!email || !password){
+    const { email, password , role } = req.body;
+    if(!email || !password || !role){
        return res.status(404).json({
         message : "Something is missing"
        })
@@ -100,6 +100,7 @@ export const login = async (req, res) => {
         });
       }
 
+     
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch){ 
       return res.status(401).json({
@@ -107,6 +108,14 @@ export const login = async (req, res) => {
           success: false
         });
      }
+
+
+     if(role !== user.role){
+        return res.status(401).json({
+            message: "User not available with this role"  ,
+             success: false
+           });
+      }
 
     const token = jwt.sign(
       { userId: user._id,  },
