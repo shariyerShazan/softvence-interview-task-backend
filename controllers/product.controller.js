@@ -56,6 +56,7 @@ export const getAllProducts = async (req, res) => {
       products,
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -81,6 +82,51 @@ export const deleteProduct = async (req, res) => {
       message: "Product deleted successfully",
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+
+
+
+export const updateProduct = async ()=>{
+        try {
+            const {productId} = req.params
+
+            const product = await Product.findOne(productId)
+            if(!product){
+                return res.status(404).json({ 
+                    success: false,
+                    message: "Product not found" 
+                   });
+            }
+
+            const { title, description, price, stock, category, images } = req.body;
+            if(title) {
+                product.title = title
+            }
+            if(description) {
+                product.description = description
+            }
+            if(price) {
+                product.price = price
+            }
+            if(stock) {
+                product.stock = stock
+            }
+            if(category) {
+                product.category = category
+            }
+            if(images) {
+                product.images = {...product.images , images} 
+            }
+  
+            await product.save()
+            
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ success: false, message: error.message });
+        }
+}
