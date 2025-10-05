@@ -260,19 +260,27 @@ export const removeVendor = async (req, res) => {
 
 export const requestForVendor = async (req, res) => {
     try {
-      const userId = req.user.userId;
-      const user = await User.findById(userId);
+      const user = await User.findById(req.userId);
   
       if (!user) {
-        return res.status(404).json({ message: "User not found", success: false });
+        return res.status(404).json({
+             message: "User not found",
+              success: false 
+         });
       }
   
       if (user.role === "vendor") {
-        return res.status(400).json({ message: "You are already a vendor", success: false });
+        return res.status(400).json({
+             message: "You are already a vendor",
+              success: false
+          });
       }
   
       if (user.vendorRequest === "pending") {
-        return res.status(400).json({ message: "Vendor request already pending", success: false });
+        return res.status(400).json({
+             message: "Vendor request already pending", 
+             success: false
+         });
       }
   
       user.vendorRequest = "pending";
@@ -283,9 +291,58 @@ export const requestForVendor = async (req, res) => {
         success: true,
       });
     } catch (error) {
-      res.status(500).json({ message: "Failed to send request", success: false, error: error.message });
+      res.status(500).json({
+         message: "Failed to send request",
+          success: false, 
+          error: error.message
+         });
     }
   };
   
 
- 
+  export const acceptVendorRequest = async (req, res) => {
+    try {
+      const { userID } = req.params; 
+      const admin = await User.findById(req.userId); 
+  
+      if (admin.role !== "admin") {
+        return res.status(403).json({
+           message: "Access denied",
+            success: false
+         });
+      }
+  
+      const user = await User.findById(userID);
+      if (!user) {
+        return res.status(404).json({ 
+          message: "User not found",
+          success: false 
+        });
+      }
+  
+      if (user.vendorRequest !== "pending") {
+        return res.status(400).json({
+           message: "No pending request found", 
+           success: false 
+          });
+      }
+  
+      user.role = "vendor";
+      user.vendorRequest = "approved";
+      await user.save();
+  
+      return res.status(200).json({
+        message: "Vendor request approved",
+        success: true,
+        user
+      });
+    } catch (error) {
+      res.status(500).json({
+           message: "Failed to approve request",
+           success: false,
+           error: error.message 
+        });
+    }
+  };
+  
+
