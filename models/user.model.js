@@ -21,7 +21,8 @@ const userSchema = new mongoose.Schema({
      type: String,
       enum: ['user', 'vendor', 'admin'],
        default: 'user'
-     }
+     },
+ vendorRequest: { type: String, enum: ['pending', 'approved', 'rejected'], default: null }
      
 } , {timestamps: true});
 

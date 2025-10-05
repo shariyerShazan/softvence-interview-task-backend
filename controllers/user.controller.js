@@ -254,3 +254,38 @@ export const removeVendor = async (req, res) => {
     res.status(500).json({ message: "Failed", success: false });
   }
 };
+
+
+
+
+export const requestForVendor = async (req, res) => {
+    try {
+      const userId = req.user.userId;
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found", success: false });
+      }
+  
+      if (user.role === "vendor") {
+        return res.status(400).json({ message: "You are already a vendor", success: false });
+      }
+  
+      if (user.vendorRequest === "pending") {
+        return res.status(400).json({ message: "Vendor request already pending", success: false });
+      }
+  
+      user.vendorRequest = "pending";
+      await user.save();
+  
+      return res.status(200).json({
+        message: "Vendor request sent successfully",
+        success: true,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to send request", success: false, error: error.message });
+    }
+  };
+  
+
+ 
