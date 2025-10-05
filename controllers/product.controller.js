@@ -91,11 +91,11 @@ export const deleteProduct = async (req, res) => {
 
 
 
-export const updateProduct = async ()=>{
+export const updateProduct = async (req , res)=>{
         try {
             const {productId} = req.params
 
-            const product = await Product.findOne(productId)
+            const product = await Product.findById(productId)
             if(!product){
                 return res.status(404).json({ 
                     success: false,
@@ -120,11 +120,16 @@ export const updateProduct = async ()=>{
                 product.category = category
             }
             if(images) {
-                product.images = {...product.images , images} 
+                product.images =  images
             }
   
             await product.save()
-            
+
+             return res.status(200).json({
+                message : "Product updated successsfully" ,
+                success: true ,
+                product
+             })
         } catch (error) {
             console.log(error)
             res.status(500).json({ success: false, message: error.message });
